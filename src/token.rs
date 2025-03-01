@@ -1,9 +1,9 @@
-pub enum TokenType {
-    Keyword,
-    Identifier,
-    Integer,
-    String,
-    Comment,
+pub enum Token {
+    KeywordVar,
+    Identifier(String),
+    Integer(i32),
+    String(String),
+    Comment(String),
 
     // Operators
     Assignment,
@@ -20,24 +20,4 @@ pub enum TokenType {
 
     EndOfFile,
     Unknown
-}
-
-
-pub struct Token {
-    t_type: TokenType,
-    pub value: String,
-    start: usize,
-    end: usize,
-}
-
-
-impl Token {
-    pub fn new(t_type: TokenType, value: String) -> Token {
-        Self {
-            t_type,
-            value,
-            start: 0,
-            end: 0,
-        }
-    }
 }

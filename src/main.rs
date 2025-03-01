@@ -1,8 +1,9 @@
 mod token;
 mod lexer;
+mod parser;
 
-use token::Token;
 use lexer::Lexer;
+use parser::Parser;
 
 
 fn main() {
@@ -11,8 +12,8 @@ r#"var i = 20"#;
 
     let mut lexer = Lexer::new(source_code);
 
-    println!("{}", lexer.read_next_token().value);
-    println!("{}", lexer.read_next_token().value);
-    println!("{}", lexer.read_next_token().value);
-    println!("{}", lexer.read_next_token().value);
+    println!("{}", lexer.read_next_token());
+    println!("{}", lexer.read_next_token());
+    println!("{}", lexer.read_next_token());
+    println!("{}", lexer.read_next_token());
 }
