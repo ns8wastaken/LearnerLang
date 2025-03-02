@@ -9,14 +9,14 @@ pub enum ASTNode {
 }
 
 
-pub struct Parser {
-    tokens: Vec<Token>,
+pub struct Parser<'a> {
+    tokens: Vec<Token<'a>>,
     current: usize,
 }
 
 
-impl Parser {
-    pub fn new(tokens: Vec<Token>) -> Self {
+impl<'a> Parser<'a> {
+    pub fn new(tokens: Vec<Token<'a>>) -> Self {
         Parser {
             tokens,
             current: 0,
@@ -28,18 +28,14 @@ impl Parser {
     }
 
     fn current_token(&self) -> &Token {
-        self.tokens.get(self.current).expect("How?")
+        self.tokens.get(self.current).unwrap()
     }
 
     fn advance(&mut self) {
         self.current += 1;
     }
 
-    fn current_token_is(&self, token: &Token) -> bool {
-        std::mem::discriminant(self.current_token()) == std::mem::discriminant(token)
-    }
-
     fn consume(&mut self) {
-        todo!()
+        
     }
 }

@@ -5,7 +5,6 @@ use crate::token::Token;
 fn is_keyword(value: &str) -> bool {
     match value {
         "var" => true,
-
         _ => false,
     }
 }
@@ -114,7 +113,7 @@ impl<'a> Lexer<'a> {
                 return Token::KeywordVar;
             }
 
-            return Token::Identifier(value.to_string());
+            return Token::Identifier(value);
         }
 
         else if c.is_ascii_digit() {
@@ -126,7 +125,7 @@ impl<'a> Lexer<'a> {
             match c {
                 '#' => {
                     let value = self.read_comment();
-                    return Token::Comment(value.to_string());
+                    return Token::Comment(value);
                 }
 
                 '=' => {
@@ -156,7 +155,7 @@ impl<'a> Lexer<'a> {
 
                 '"' => {
                     let s = self.read_string();
-                    return Token::String(s.to_string());
+                    return Token::String(s);
                 }
 
                 '\0' => {
@@ -170,4 +169,19 @@ impl<'a> Lexer<'a> {
         self.advance();
         Token::Unknown
     }
+
+    //pub fn get_tokens(&mut self) -> Vec<Token> {
+    //    let mut tokens: Vec<Token> = Vec::new();
+    //
+    //    loop {
+    //        let token = self.read_next_token();
+    //        tokens.push(token);
+    //
+    //        if tokens.last().unwrap() == &Token::EndOfFile {
+    //            break;
+    //        }
+    //    }
+    //
+    //    tokens
+    //}
 }

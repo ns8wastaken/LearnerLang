@@ -1,9 +1,10 @@
-pub enum Token {
+#[derive(Debug, PartialEq)]
+pub enum Token<'a> {
     KeywordVar,
-    Identifier(String),
+    Identifier(&'a str),
     Integer(i32),
-    String(String),
-    Comment(String),
+    String(&'a str),
+    Comment(&'a str),
 
     // Operators
     Assignment,
@@ -20,4 +21,9 @@ pub enum Token {
 
     EndOfFile,
     Unknown
+}
+
+
+fn is_current_token(t1: &Token, t2: &Token) -> bool {
+    std::mem::discriminant(t1) == std::mem::discriminant(t2)
 }
