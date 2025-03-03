@@ -9,26 +9,20 @@ use parser::Parser;
 
 fn main() {
     let source_code =
-r#"var i = 20"#;
+r#"var i = 20;
+var j = 20 - 10
+var k = i + j;"#;
 
     let mut lexer = Lexer::new(source_code);
-    let mut token_vec: Vec<Token> = Vec::new();
+    let tokens = lexer.get_tokens();
 
-    loop {
-        let token = lexer.read_next_token();
-        token_vec.push(token);
-
-        if let Some(last_token) = token_vec.last() {
-            if last_token == &Token::EndOfFile {
-                break;
-            }
-        }
+    for t in &tokens {
+        println!("{:?}", t);
     }
 
-    let mut parser = Parser::new(token_vec);
-
-    //println!("{:?}", lexer.read_next_token());
-    //println!("{:?}", lexer.read_next_token());
-    //println!("{:?}", lexer.read_next_token());
-    //println!("{:?}", lexer.read_next_token());
+    let mut parser = Parser::new(tokens);
+    match parser.parse() {
+        Ok(ast) => println!("Parsed AST: {:?}", ast),
+        Err(e) => println!("Error: {}", e),
+    }
 }

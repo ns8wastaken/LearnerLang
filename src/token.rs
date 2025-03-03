@@ -1,10 +1,11 @@
-#[derive(Debug, PartialEq)]
-pub enum Token<'a> {
+#[derive(Debug)]
+pub enum Token {
     KeywordVar,
-    Identifier(&'a str),
+    Semicolon,
+    Identifier(String),
     Integer(i32),
-    String(&'a str),
-    Comment(&'a str),
+    String(String),
+    Comment(String),
 
     // Operators
     Assignment,
@@ -24,6 +25,8 @@ pub enum Token<'a> {
 }
 
 
-fn is_current_token(t1: &Token, t2: &Token) -> bool {
-    std::mem::discriminant(t1) == std::mem::discriminant(t2)
+impl Token {
+    pub fn eq(&self, t: &Token) -> bool {
+        std::mem::discriminant(self) == std::mem::discriminant(t)
+    }
 }

@@ -51,7 +51,7 @@ impl<'a> Lexer<'a> {
         }
     }
 
-    fn read_alpha_chars(&mut self) -> &str {
+    fn read_alpha_chars(&mut self) -> String {
         let start = self.pos;
 
         let mut c = self.current_char();
@@ -61,20 +61,20 @@ impl<'a> Lexer<'a> {
             c = self.current_char();
         }
 
-        self.source.get(start..self.pos).unwrap()
+        self.source.get(start..self.pos).unwrap().to_string()
     }
 
-    fn read_digits(&mut self) -> &str {
+    fn read_digits(&mut self) -> String {
         let start = self.pos;
 
         while self.current_char().is_ascii_digit() {
             self.advance();
         }
 
-        self.source.get(start..self.pos).unwrap()
+        self.source.get(start..self.pos).unwrap().to_string()
     }
 
-    fn read_string(&mut self) -> &str {
+    fn read_string(&mut self) -> String {
         let start = self.pos;
 
         let mut c = self.current_char();
@@ -86,10 +86,10 @@ impl<'a> Lexer<'a> {
 
         self.advance();
 
-        self.source.get(start..self.pos).unwrap()
+        self.source.get(start..self.pos).unwrap().to_string()
     }
 
-    fn read_comment(&mut self) -> &str {
+    fn read_comment(&mut self) -> String {
         let start = self.pos;
 
         while self.current_char() != '\n' {
@@ -98,10 +98,10 @@ impl<'a> Lexer<'a> {
 
         self.advance();
 
-        self.source.get(start..self.pos - 1).unwrap()
+        self.source.get(start..self.pos - 1).unwrap().to_string()
     }
 
-    pub fn read_next_token(&mut self) -> Token {
+    fn read_next_token(&mut self) -> Token {
         self.skip_whitespace();
 
         let c = self.current_char();
@@ -109,7 +109,7 @@ impl<'a> Lexer<'a> {
         if c.is_alphabetic() || c == '_' {
             let value = self.read_alpha_chars();
 
-            if is_keyword(value) {
+            if is_keyword(value.as_str()) {
                 return Token::KeywordVar;
             }
 
@@ -158,6 +158,11 @@ impl<'a> Lexer<'a> {
                     return Token::String(s);
                 }
 
+                ';' => {
+                    self.advance();
+                    return Token::Semicolon;
+                }
+
                 '\0' => {
                     return Token::EndOfFile;
                 }
@@ -170,18 +175,18 @@ impl<'a> Lexer<'a> {
         Token::Unknown
     }
 
-    //pub fn get_tokens(&mut self) -> Vec<Token> {
-    //    let mut tokens: Vec<Token> = Vec::new();
-    //
-    //    loop {
-    //        let token = self.read_next_token();
-    //        tokens.push(token);
-    //
-    //        if tokens.last().unwrap() == &Token::EndOfFile {
-    //            break;
-    //        }
-    //    }
-    //
-    //    tokens
-    //}
+    pub fn get_tokens(&mut self) -> Vec<Token> {
+        let mut tokens: Vec<Token> = Vec::new();
+
+        loop {
+            let token = self.read_next_token();
+            tokens.push(token);
+
+            if tokens.last().unwrap().eq(&Token::EndOfFile) {
+                break;
+            }
+        }
+
+        tokens
+    }
 }
